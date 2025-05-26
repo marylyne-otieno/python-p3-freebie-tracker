@@ -1,15 +1,13 @@
 """create db
 
 Revision ID: 7a71dbf71c64
-Revises: 
+Revises:
 Create Date: 2023-03-15 15:05:55.516631
 
 """
 from alembic import op
 import sqlalchemy as sa
 
-
-# revision identifiers, used by Alembic.
 revision = '7a71dbf71c64'
 down_revision = None
 branch_labels = None
@@ -17,8 +15,37 @@ depends_on = None
 
 
 def upgrade() -> None:
-    pass
+    
+    op.create_table('companies',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('name', sa.String(), nullable=True),
+        sa.Column('founding_year', sa.Integer(), nullable=True),
+        sa.PrimaryKeyConstraint('id')
+    )
+
+    op.create_table('devs',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('name', sa.String(), nullable=True),
+        sa.PrimaryKeyConstraint('id')
+    )
+
+    op.create_table('freebies',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('item_name', sa.String(), nullable=True),
+        sa.Column('value', sa.Integer(), nullable=True),
+        sa.Column('company_id', sa.Integer(), nullable=True),
+        sa.Column('dev_id', sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(['company_id'], ['companies.id'], name=op.f('fk_freebies_company_id_companies')),
+        sa.ForeignKeyConstraint(['dev_id'], ['devs.id'], name=op.f('fk_freebies_dev_id_devs')),
+        sa.PrimaryKeyConstraint('id')
+    )
+
 
 
 def downgrade() -> None:
-    pass
+
+    op.drop_table('freebies')
+    op.drop_table('devs')
+    op.drop_table('companies')
+
+
