@@ -1,25 +1,45 @@
 #!/usr/bin/env python3
 
 # Script goes here!
-from models import Company, Dev, Freebie, Base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from models import Company, Dev, Freebie, session
 
-engine = create_engine('sqlite:///freebies.db')
-Session = sessionmaker(bind=engine)
-session = Session()
+def seed_data():
+    # Clear existing data (optional)
+    session.query(Freebie).delete()
+    session.query(Company).delete()
+    session.query(Dev).delete()
+    session.commit()
 
-Base.metadata.create_all(engine)
+    # Create sample companies
+    company1 = Company(name="Tech Corp", founding_year=2010)
+    company2 = Company(name="Innovate Ltd", founding_year=2015)
 
-company1 = Company(name="Google", founding_year=1998)
-company2 = Company(name="Amazon", founding_year=1994)
-dev1 = Dev(name="Alice")
-dev2 = Dev(name="Bob")
+    # Create sample devs
+    dev1 = Dev(name="Alice")
+    dev2 = Dev(name="Bob")
 
-session.add_all([company1, company2, dev1, dev2])
-session.commit()
+    # Create freebies linked to companies and devs
+    freebie1 = Freebie(item_name="T-Shirt", value=20, company=company1, dev=dev1)
+    freebie2 = Freebie(item_name="Mug", value=10, company=company1, dev=dev2)
+    freebie3 = Freebie(item_name="Sticker Pack", value=5, company=company2, dev=dev1)
 
-company1.give_freebie(session, dev1, "T-shirt", 15)
-company2.give_freebie(session, dev2, "Mug", 10)
-session.commit()
+    # Add all to session
+    session.add_all([company1, company2, dev1, dev2, freebie1, freebie2, freebie3])
+    session.commit()
 
+def print_data():
+    print("\nCompanies:")
+    for c in session.query(Company).all():
+        print(c)
+
+    print("\nDevelopers:")
+    for d in session.query(Dev).all():
+        print(d)
+
+    print("\nFreebies:")
+    for f in session.query(Freebie).all():
+        print(f, f.company, f.dev)
+
+if __name__ == "__main__":
+    seed_data()
+    print_data()

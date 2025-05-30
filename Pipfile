@@ -6,13 +6,13 @@ name = "pypi"
 [packages]
 importlib-metadata = "6.0.0"
 importlib-resources = "5.10.0"
-alembic = "*"
 sqlalchemy = "*"
 ipython = "*"
 psycopg2-binary = "*"
 ipdb = "*"
 faker = "*"
 tabulate = "*"
+alembic = "*"
 
 [dev-packages]
 
