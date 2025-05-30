@@ -3,7 +3,6 @@ from sqlalchemy import ForeignKey, Column, Integer, String, MetaData, create_eng
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-# Naming convention for constraints (optional but good practice)
 convention = {
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
 }
@@ -49,11 +48,9 @@ class Freebie(Base):
     def __repr__(self):
         return f'<Freebie {self.item_name} worth {self.value}>'
 
-# Database setup - adjust DB URL as needed (SQLite file named freebie_tracker.db)
 engine = create_engine('sqlite:///freebie_tracker.db')
 
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# Create tables if they don't exist yet
 Base.metadata.create_all(engine)
