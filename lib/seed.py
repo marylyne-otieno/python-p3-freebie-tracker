@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from models import Company, Dev, Freebie, session
-
 def seed_data():
 
     session.query(Freebie).delete()
